@@ -12,7 +12,7 @@ class StorePacketRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,9 +21,13 @@ class StorePacketRequest extends FormRequest
      * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
+   {
         return [
-            //
+            'tracking_code' => 'required|string|unique:packets,tracking_code',
+            'recipient_name' => 'required|string',
+            'recipient_email' => 'required|email',
+            'destination_address' => 'required|string',
+            'weight_grams' => 'required|integer|min:1',
         ];
     }
 }

@@ -21,4 +21,6 @@ class Packet extends Model
     public const STATUS_IN_TRANSIT = 'in_transit';
     public const STATUS_DELIVERED = 'delivered';
     public const STATUS_FAILED = 'failed';
+
+    
 }

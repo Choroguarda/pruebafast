@@ -12,7 +12,7 @@ class UpdatePacketStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,8 +22,10 @@ class UpdatePacketStatusRequest extends FormRequest
      */
     public function rules(): array
     {
+    {
         return [
-            //
+            'status' => 'required|in:in_transit,delivered,failed'
         ];
+    }
     }
 }
