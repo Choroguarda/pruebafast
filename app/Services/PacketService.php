@@ -2,11 +2,13 @@
 
 namespace App\Services;
 use App\Models\Packet;
+use App\Jobs\SendPacketStatusWebhook;
 use Illuminate\Support\Facades\Cache;
 
 class PacketService
-{ //Crear paquete
-  public function create(array $data): Packet
+
+{   //Crear paquete
+    public function create(array $data): Packet
     {
         return Packet::create([
             ...$data,
@@ -14,21 +16,32 @@ class PacketService
         ]);
     }
     //Actualiza paquete
-    public function updateStatus(Packet $packet, string $newStatus): Packet
-    {
-        //LLama a funcion de la case  para verificar si es posible transision de estado.
-        if (!$packet->canTransitionTo($newStatus)) {
-            throw new \Exception(
-                "No se pudo transisionar el estado del paquete de {$packet->status} a {$newStatus}"
-            );
+ public function updateStatus(Packet $packet, string $newStatus): Packet
+{
+    // Validar transición
+    if (!$packet->canTransitionTo($newStatus)) {
+        throw new \Exception(
+            "No se pudo transisionar el estado del paquete de {$packet->status} a {$newStatus}"
+        );
     }
+
+    $oldStatus = $packet->status;
 
     $packet->update([
         'status' => $newStatus
     ]);
 
+    // Ejecuta el job con los estados y el paquete
+    SendPacketStatusWebhook::dispatch(
+        $packet,
+        $oldStatus,
+        $newStatus
+    );
+
+    Cache::flush();
+
     return $packet;
-    }
+}
     //Lista paquetes segun tipo de estado
     public function listPackets(?string $status = null)
     {
