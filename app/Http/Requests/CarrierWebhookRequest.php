@@ -12,7 +12,7 @@ class CarrierWebhookRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,10 @@ class CarrierWebhookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-        ];
+                'tracking_code' => 'required|string',
+                'status' => 'required|string|in:delivered',
+                'timestamp' => 'required|date',
+                'signature' => 'required|string'
+            ];
     }
 }
