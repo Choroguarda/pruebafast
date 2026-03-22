@@ -96,4 +96,4 @@ http://127.0.0.1:8000/api/webhooks/carrier
 
 # Autor
 
-Prueba técnica desarrollada por: <Dario Alejandro Guarda Ovando>
+Prueba técnica desarrollada por: Dario Alejandro Guarda Ovando
